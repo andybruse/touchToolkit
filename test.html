@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>test</title>
+  <style type="text/css">
+    body{ margin: 0px; font: 100% "Microsoft Yahei"; background: #ececec;}
+    a{ text-decoration: none;}
+    ul,dl,dt,dd,h4,p{ padding: 0px; margin: 0px;}
+    li{ list-style: none;}
+    .header{ color: #a1a9b6; background: #4f4f59; overflow: hidden;}
+    .nav-bar{ height: 46px; line-height: 46px; font-size: 0px; white-space: nowrap; -webkit-transition: transform .2s; -moz-transition: transform .2s; transition: transform .2s;}
+    .nav-bar .nav-item{ display: inline-block; padding: 0px 12px; font-size: 1rem;}
+    .nav-bar .current{ color: #ffffff;}
+    .news-container{ padding: 8px 8px 0px 8px; overflow: hidden;}
+    .news-item{ position: relative; height: 140px; padding-right: 140px; margin-bottom: 8px; background: #ffffff; border: 1px solid #e1e1e1; overflow: hidden;}
+    .news-item .news-item-shortcut{ position: absolute; top: 0px; right: 0px; width: 140px; height: 140px;}
+    .news-item .news-item-shortcut img{ display: block; width: 100%;}
+    .news-item-detail{ padding: 14px 9px;}
+    .news-item-detail .news-item-detail-title{ font-size: 1em;}
+    .news-item-detail .news-item-detail-des{ color: #a8a8a8; font-size: 0.75rem;}
+    .news-item-detail .news-item-detail-tips{ color: #c6c6c6; font-size: 0.625em;}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <ul class="nav-bar">
+      <li class="nav-item current">新闻</li>
+      <li class="nav-item">财经</li>
+      <li class="nav-item">体育</li>
+      <li class="nav-item">娱乐</li>
+      <li class="nav-item">订阅</li>
+      <li class="nav-item">微博</li>
+      <li class="nav-item">空间</li>
+      <li class="nav-item">汽车</li>
+      <li class="nav-item">时尚</li>
+      <li class="nav-item">旅游</li>
+    </ul>
+  </div>
+  <!--div class="news-container">
+    <dl class="news-item">
+      <dt class="news-item-shortcut"><img src="demo.png"></dt>
+      <dd class="news-item-detail">
+        <h4 class="news-item-detail-title">微信广告</h4>
+        <p class="news-item-detail-des">微信广告微信广告微信广告微信广告</p>
+        <i class="news-item-detail-tips">4545人看过</i>
+      </dd>
+    </dl>
+  </div-->
+
+  <script type="text/javascript" src="zepto.min.js"></script>
+  <script type="text/javascript">
+    (function(window){
+
+      var curStyleCtn = document.createElement("div").style,
+        vendor = (function() {
+          var vendors = 't,webkitT,MozT'.split(','), t;
+          for (i = 0; i < vendors.length; i++) {
+            t = vendors[i] + 'ransform';
+            if (t in curStyleCtn) {
+              return vendors[i].substr(0, vendors[i].length - 1);
+            }
+          }
+          return false;
+        })(),
+        cssVendor = vendor ? '-' + vendor.toLowerCase() + '-' : '',
+
+        prefixStyle = function(style) {
+          if (vendor === '') return style;
+          style = style.charAt(0).toUpperCase() + style.substr(1);
+          return vendor + style;
+        },
+
+      transform = prefixStyle('transform');
+
+      var touchEvent = {
+        start: "touchstart",
+        move: "touchmove",
+        end: "touchend"
+      };
+      var Slide = function(config){
+        for (var c in config) {
+          this[c] = config[c];
+        }
+        this.el = document.querySelector(this.targetSelector);
+        this.wrap = document.querySelector(this.wrapSelector);
+        this.items = this.wrap.children;
+        var itemWidth = this.getItemWidth();
+        var activeIndex = this.activeIndex;
+        this.availableScrollDist = itemWidth * this.items.length - window.screen.width;
+        if (this.availableScrollDist < 0) {
+          this.availableScrollDist = 0;
+        }
+        //init slide bar width
+        this.wrap.style.width = itemWidth * this.items.length + "px";
+        this.wrap.addEventListener(touchEvent.start, this, false);
+      };
+
+      Slide.prototype = {
+        activeIndex: 0,
+
+        previousOffset: 0,
+
+        getItemWidth: function() {
+          return this.el.offsetWidth;
+        },
+
+        onTouchStart: function(e){
+          var me = this;
+          me.wrap.addEventListener(touchEvent.move, me, false);
+          me.wrap.addEventListener(touchEvent.end, me, false);
+
+          me.touchCoords = me.touchCoords || {};
+          me.touchCoords.startX = e.touches[0].pageX;
+          me.touchCoords.startY = e.touches[0].pageY;
+        },
+
+        onTouchMove: function(e){
+          e.preventDefault();
+          var me = this;
+          if (me.touchCoords) {
+            me.touchCoords.stopX = e.touches[0].pageX;
+            me.touchCoords.stopY = e.touches[0].pageY;
+
+            var offsetX = me.touchCoords.startX - me.touchCoords.stopX + me.previousOffset;
+            me.touchCoords.offsetX = offsetX;
+            me.wrap.style[transform] = 'translate3d(' + -me.touchCoords.offsetX + 'px, 0px, 0px)';
+          }
+        },
+
+        onTouchEnd: function(e){
+          if ((this.previousOffset - this.touchCoords.offsetX) > 0) {
+            this.wrap.style[transform] = 'translate3d(0px, 0px, 0px)';
+            this.previousOffset = 0;
+          }else if (Math.abs(this.touchCoords.offsetX) > this.availableScrollDist) {
+            this.wrap.style[transform] = 'translate3d('+ -this.availableScrollDist +'px, 0px, 0px)';
+            this.previousOffset = this.availableScrollDist;
+          }else{
+            this.previousOffset += this.touchCoords.offsetX;
+          }
+        },
+
+        handleEvent: function(e){
+          switch(e.type){
+            case touchEvent.start:
+              this.onTouchStart(e);
+              break;
+            case touchEvent.move:
+              this.onTouchMove(e);
+              break;
+            case touchEvent.end:
+              this.onTouchEnd(e);
+              break;
+            case "click":
+              console.log("click");
+              break;
+          }
+        }
+      };
+
+      window.Slide = Slide;
+    })(window);
+
+    new Slide({
+      targetSelector: ".nav-item",
+      wrapSelector: ".nav-bar"
+    });
+  </script>
+</body>
+</html>
