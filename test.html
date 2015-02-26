@@ -108,10 +108,12 @@
 
         onTouchStart: function(e){
           var me = this;
+          me.wrap.removeEventListener(touchEvent.move, me, false);
+          me.wrap.removeEventListener(touchEvent.end, me, false);
           me.wrap.addEventListener(touchEvent.move, me, false);
           me.wrap.addEventListener(touchEvent.end, me, false);
 
-          me.touchCoords = me.touchCoords || {};
+          me.touchCoords = {};
           me.touchCoords.startX = e.touches[0].pageX;
           me.touchCoords.startY = e.touches[0].pageY;
         },
@@ -139,6 +141,9 @@
           }else{
             this.previousOffset += this.touchCoords.offsetX;
           }
+          this.wrap.removeEventListener(touchEvent.move, this, false);
+          this.wrap.removeEventListener(touchEvent.end, this, false);
+          delete this.touchCoords;
         },
 
         handleEvent: function(e){
