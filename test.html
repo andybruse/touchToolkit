@@ -14,7 +14,8 @@
     .nav-bar{ height: 46px; line-height: 46px; font-size: 0px; white-space: nowrap; -webkit-transition: transform .2s; -moz-transition: transform .2s; transition: transform .2s;}
     .nav-bar .nav-item{ display: inline-block; padding: 0px 12px; font-size: 1rem;}
     .nav-bar .current{ color: #ffffff;}
-    .news-store{ display: -webkit-box; overflow: hidden;}
+    .news-store-wrap{ width: 100%; overflow: hidden;}
+    .news-store{ display: -webkit-box; -webkit-transition: transform .2s; -moz-transition: transform .2s; transition: transform .2s; overflow: hidden;}
     .news-store .news-tab{ width: 100%; overflow: hidden;}
     .news-store .news-item-wrap{ padding: 8px 8px 0px;}
     .news-item{ display: block; position: relative; padding: 10px 8px; margin-bottom: 8px; background: #ffffff; border: 1px solid #e1e1e1; overflow: hidden;}
@@ -39,39 +40,41 @@
       <li class="nav-item">旅游</li>
     </ul>
   </div>
-  <div class="news-store">
-    <div class="news-tab" data-res="" status="">
-      <div class="news-item-wrap">
-        <a class="news-item" href="javascript:void(0);">
-          <h4 class="news-item-detail-title">微信广告</h4>
-          <p class="news-item-detail-des">微信广告微信广告微信广告微信广告</p>
-          <i class="news-item-detail-tips">4545人看过</i>
-        </a>
+  <div class="news-store-wrap">
+    <div class="news-store">
+      <div class="news-tab" data-res="" status="">
+        <div class="news-item-wrap">
+          <a class="news-item" href="javascript:void(0);">
+            <h4 class="news-item-detail-title">微信广告</h4>
+            <p class="news-item-detail-des">微信广告微信广告微信广告微信广告</p>
+            <i class="news-item-detail-tips">4545人看过</i>
+          </a>
+        </div>
+        <div class="news-item-wrap">
+          <a class="news-item" href="javascript:void(0);">
+            <img class="news-item-shortcut" src="http://p1.pstatp.com/list/2257/5986681960">
+            <h4 class="news-item-detail-title">微信广告</h4>
+            <p class="news-item-detail-des">微信广告微信广告微信</p>
+            <i class="news-item-detail-tips">4545人看过</i>
+          </a>
+        </div>
       </div>
-      <div class="news-item-wrap">
-        <a class="news-item" href="javascript:void(0);">
-          <img class="news-item-shortcut" src="http://p1.pstatp.com/list/2257/5986681960">
-          <h4 class="news-item-detail-title">微信广告</h4>
-          <p class="news-item-detail-des">微信广告微信广告微信</p>
-          <i class="news-item-detail-tips">4545人看过</i>
-        </a>
-      </div>
-    </div>
-    <div class="news-tab" data-res="" status="">
-      <div class="news-item-wrap">
-        <a class="news-item" href="javascript:void(0);">
-          <h4 class="news-item-detail-title">微信广告</h4>
-          <p class="news-item-detail-des">微信广告微信广告微信广告微信广告</p>
-          <i class="news-item-detail-tips">4545人看过</i>
-        </a>
-      </div>
-      <div class="news-item-wrap">
-        <a class="news-item" href="javascript:void(0);">
-          <img class="news-item-shortcut" src="http://p1.pstatp.com/list/2257/5986681960">
-          <h4 class="news-item-detail-title">微信广告</h4>
-          <p class="news-item-detail-des">微信广告微信广告微信</p>
-          <i class="news-item-detail-tips">4545人看过</i>
-        </a>
+      <div class="news-tab" data-res="" status="">
+        <div class="news-item-wrap">
+          <a class="news-item" href="javascript:void(0);">
+            <h4 class="news-item-detail-title">微信广告</h4>
+            <p class="news-item-detail-des">微信广告微信广告微信广告微信广告</p>
+            <i class="news-item-detail-tips">4545人看过</i>
+          </a>
+        </div>
+        <div class="news-item-wrap">
+          <a class="news-item" href="javascript:void(0);">
+            <img class="news-item-shortcut" src="http://p1.pstatp.com/list/2257/5986681960">
+            <h4 class="news-item-detail-title">微信广告</h4>
+            <p class="news-item-detail-des">微信广告微信广告微信</p>
+            <i class="news-item-detail-tips">4545人看过</i>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -113,6 +116,7 @@
         this.el = document.querySelector(this.targetSelector);
         this.wrap = document.querySelector(this.wrapSelector);
         this.items = this.wrap.children;
+        this.previousOffset = this.getWrapTranslateX();
         var itemWidth = this.getItemWidth();
         var activeIndex = this.activeIndex;
         this.availableScrollDist = itemWidth * this.items.length - window.screen.width;
@@ -121,6 +125,11 @@
         }
         //init slide bar width
         this.wrap.style.width = itemWidth * this.items.length + "px";
+        if (this.slideType == "ctn-card") {
+          $.each(this.items, function(i, t){
+            t.style.width = itemWidth + "px";
+          });
+        }
         this.wrap.addEventListener(touchEvent.start, this, false);
       };
 
@@ -133,6 +142,30 @@
           return this.el.offsetWidth;
         },
 
+        getLastIndex: function(){
+          return this.items.length - 1;
+        },
+
+        getWrapTranslateX: function(){
+          var transValue = this.wrap.style[transform].match(/translateX\(([\d\-\.]+)px\)/);
+          return transValue ? parseFloat(transValue[1]) : 0;
+        },
+
+        to: function(toIndex){
+          var lastIndex = this.getLastIndex();
+          if (toIndex >=0 && toIndex <= lastIndex && toIndex != this.activeIndex) {
+            this.slide(toIndex);
+          }else {
+            this.slide(this.activeIndex);
+          }
+        },
+
+        slide: function(toIndex){
+          var me = this, curMoveDist = -me.getItemWidth() * toIndex;
+          me.activeIndex = toIndex;
+          me.wrap.style[transform] = 'translateX('+ curMoveDist +'px)';;
+        },
+
         onTouchStart: function(e){
           var me = this;
           me.wrap.removeEventListener(touchEvent.move, me, false);
@@ -140,9 +173,11 @@
           me.wrap.addEventListener(touchEvent.move, me, false);
           me.wrap.addEventListener(touchEvent.end, me, false);
 
+          me.previousOffset = this.getWrapTranslateX();
           me.touchCoords = {};
           me.touchCoords.startX = e.touches[0].pageX;
           me.touchCoords.startY = e.touches[0].pageY;
+          me.touchCoords.timeStamp = e.timeStamp;
         },
 
         onTouchMove: function(e){
@@ -151,23 +186,48 @@
           if (me.touchCoords) {
             me.touchCoords.stopX = e.touches[0].pageX;
             me.touchCoords.stopY = e.touches[0].pageY;
-
-            var offsetX = me.touchCoords.startX - me.touchCoords.stopX + me.previousOffset;
-            me.touchCoords.offsetX = offsetX;
-            me.wrap.style[transform] = 'translate3d(' + -me.touchCoords.offsetX + 'px, 0px, 0px)';
+            me.touchCoords.offsetX = -(me.touchCoords.startX - me.touchCoords.stopX + me.previousOffset);
+            me.wrap.style[transform] = 'translateX(' + me.touchCoords.offsetX + 'px)';
+            console.log("m.offsetX:" + me.touchCoords.offsetX);
           }
         },
 
         onTouchEnd: function(e){
-          if ((this.previousOffset - this.touchCoords.offsetX) > 0) {
-            this.wrap.style[transform] = 'translate3d(0px, 0px, 0px)';
-            this.previousOffset = 0;
-          }else if (Math.abs(this.touchCoords.offsetX) > this.availableScrollDist) {
-            this.wrap.style[transform] = 'translate3d('+ -this.availableScrollDist +'px, 0px, 0px)';
-            this.previousOffset = this.availableScrollDist;
-          }else{
-            this.previousOffset += this.touchCoords.offsetX;
+          switch(this.slideType) {
+            case "ctn-card":
+              console.log("final offsetX: "+this.touchCoords.offsetX)
+              if (Math.abs(this.touchCoords.offsetX) >= 80 || (e.timeStamp - this.touchCoords.timeStamp < 200)) {
+                if (this.touchCoords.startX > this.touchCoords.stopX) {
+                  //向左滑
+                  this.to(this.activeIndex + 1);
+                }else{
+                  //向右滑
+                  this.to(this.activeIndex - 1);
+                }
+              }else{
+                this.to(this.activeIndex);
+              }
+              break;
+            case "header-nav":
+
+              if (e.timeStamp - this.touchCoords.timeStamp < 200) { //当前情况不触发move因此previousoffset变量NaN错误
+                return;
+              }
+
+              this.previousOffset = this.getWrapTranslateX();
+              if (this.previousOffset > 0) {//向右滑
+                this.wrap.style[transform] = 'translateX(0px)';
+                console.log("header-nav//向右滑");
+              }else{//向左滑
+                if (Math.abs(this.previousOffset) > this.availableScrollDist) {//向左滑动到了最后一个导航
+                  this.wrap.style[transform] = 'translateX('+ -this.availableScrollDist +'px)';
+                  console.log("header-nav//向左滑");
+                }
+              }
+              break;
           }
+
+          this.previousOffset = 0;
           this.wrap.removeEventListener(touchEvent.move, this, false);
           this.wrap.removeEventListener(touchEvent.end, this, false);
           delete this.touchCoords;
@@ -191,12 +251,20 @@
         }
       };
 
+      curStyleCtn = null;
       window.Slide = Slide;
     })(window);
 
     new Slide({
       targetSelector: ".nav-item",
-      wrapSelector: ".nav-bar"
+      wrapSelector: ".nav-bar",
+      slideType: "header-nav"
+    });
+
+    new Slide({
+      targetSelector: ".news-tab",
+      wrapSelector: ".news-store",
+      slideType: "ctn-card"
     });
   </script>
 </body>
