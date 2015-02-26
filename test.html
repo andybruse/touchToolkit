@@ -5,22 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>test</title>
   <style type="text/css">
-    body{ margin: 0px; font: 100% "Microsoft Yahei"; background: #ececec;}
+    body{ margin: 0px; font: 100% "Microsoft Yahei"; background: #ececec; overflow: hidden;}
     a{ text-decoration: none;}
     ul,dl,dt,dd,h4,p{ padding: 0px; margin: 0px;}
     li{ list-style: none;}
+    i{ font-style: normal;}
     .header{ color: #a1a9b6; background: #4f4f59; overflow: hidden;}
     .nav-bar{ height: 46px; line-height: 46px; font-size: 0px; white-space: nowrap; -webkit-transition: transform .2s; -moz-transition: transform .2s; transition: transform .2s;}
     .nav-bar .nav-item{ display: inline-block; padding: 0px 12px; font-size: 1rem;}
     .nav-bar .current{ color: #ffffff;}
-    .news-container{ padding: 8px 8px 0px 8px; overflow: hidden;}
-    .news-item{ position: relative; height: 140px; padding-right: 140px; margin-bottom: 8px; background: #ffffff; border: 1px solid #e1e1e1; overflow: hidden;}
-    .news-item .news-item-shortcut{ position: absolute; top: 0px; right: 0px; width: 140px; height: 140px;}
-    .news-item .news-item-shortcut img{ display: block; width: 100%;}
-    .news-item-detail{ padding: 14px 9px;}
-    .news-item-detail .news-item-detail-title{ font-size: 1em;}
-    .news-item-detail .news-item-detail-des{ color: #a8a8a8; font-size: 0.75rem;}
-    .news-item-detail .news-item-detail-tips{ color: #c6c6c6; font-size: 0.625em;}
+    .news-store{ display: -webkit-box; overflow: hidden;}
+    .news-store .news-tab{ width: 100%; overflow: hidden;}
+    .news-store .news-item-wrap{ padding: 8px 8px 0px;}
+    .news-item{ display: block; position: relative; padding: 10px 8px; margin-bottom: 8px; background: #ffffff; border: 1px solid #e1e1e1; overflow: hidden;}
+    .news-item .news-item-shortcut{ float: right; display: block; width: 30%;}
+    .news-item .news-item-detail-title{ margin: 0; padding: 0; font-size: 19px;  color: #333333; font-weight: 400; line-height: 1.2em; min-height: 1.2em; text-align: justify; }
+    .news-item .news-item-detail-des{ padding: 8px 0px 6px; line-height: 1em; color: #848484; font-size: 16px;}
+    .news-item .news-item-detail-tips{ color: #999999; font-size: 11px; line-height: 11px;}
   </style>
 </head>
 <body>
@@ -38,16 +39,42 @@
       <li class="nav-item">旅游</li>
     </ul>
   </div>
-  <!--div class="news-container">
-    <dl class="news-item">
-      <dt class="news-item-shortcut"><img src="demo.png"></dt>
-      <dd class="news-item-detail">
-        <h4 class="news-item-detail-title">微信广告</h4>
-        <p class="news-item-detail-des">微信广告微信广告微信广告微信广告</p>
-        <i class="news-item-detail-tips">4545人看过</i>
-      </dd>
-    </dl>
-  </div-->
+  <div class="news-store">
+    <div class="news-tab" data-res="" status="">
+      <div class="news-item-wrap">
+        <a class="news-item" href="javascript:void(0);">
+          <h4 class="news-item-detail-title">微信广告</h4>
+          <p class="news-item-detail-des">微信广告微信广告微信广告微信广告</p>
+          <i class="news-item-detail-tips">4545人看过</i>
+        </a>
+      </div>
+      <div class="news-item-wrap">
+        <a class="news-item" href="javascript:void(0);">
+          <img class="news-item-shortcut" src="http://p1.pstatp.com/list/2257/5986681960">
+          <h4 class="news-item-detail-title">微信广告</h4>
+          <p class="news-item-detail-des">微信广告微信广告微信</p>
+          <i class="news-item-detail-tips">4545人看过</i>
+        </a>
+      </div>
+    </div>
+    <div class="news-tab" data-res="" status="">
+      <div class="news-item-wrap">
+        <a class="news-item" href="javascript:void(0);">
+          <h4 class="news-item-detail-title">微信广告</h4>
+          <p class="news-item-detail-des">微信广告微信广告微信广告微信广告</p>
+          <i class="news-item-detail-tips">4545人看过</i>
+        </a>
+      </div>
+      <div class="news-item-wrap">
+        <a class="news-item" href="javascript:void(0);">
+          <img class="news-item-shortcut" src="http://p1.pstatp.com/list/2257/5986681960">
+          <h4 class="news-item-detail-title">微信广告</h4>
+          <p class="news-item-detail-des">微信广告微信广告微信</p>
+          <i class="news-item-detail-tips">4545人看过</i>
+        </a>
+      </div>
+    </div>
+  </div>
 
   <script type="text/javascript" src="zepto.min.js"></script>
   <script type="text/javascript">
