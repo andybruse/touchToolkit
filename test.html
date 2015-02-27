@@ -16,7 +16,7 @@
     .nav-bar .current{ color: #ffffff;}
     .news-store-wrap{ width: 100%; overflow: hidden;}
     .news-store{ display: -webkit-box; -webkit-transition: transform .2s; -moz-transition: transform .2s; transition: transform .2s; overflow: hidden;}
-    .news-store .news-tab{ width: 100%; overflow: hidden;}
+    .news-store .news-tab{ float: left; width: 100%; overflow: hidden;}
     .news-store .news-item-wrap{ padding: 8px 8px 0px;}
     .news-item{ display: block; position: relative; padding: 10px 8px; margin-bottom: 8px; background: #ffffff; border: 1px solid #e1e1e1; overflow: hidden;}
     .news-item .news-item-shortcut{ float: right; display: block; width: 30%;}
@@ -45,7 +45,7 @@
       <div class="news-tab" data-res="" status="">
         <div class="news-item-wrap">
           <a class="news-item" href="javascript:void(0);">
-            <h4 class="news-item-detail-title">微信广告</h4>
+            <h4 class="news-item-detail-title">面板1：微信广告</h4>
             <p class="news-item-detail-des">微信广告微信广告微信广告微信广告</p>
             <i class="news-item-detail-tips">4545人看过</i>
           </a>
@@ -62,7 +62,7 @@
       <div class="news-tab" data-res="" status="">
         <div class="news-item-wrap">
           <a class="news-item" href="javascript:void(0);">
-            <h4 class="news-item-detail-title">微信广告</h4>
+            <h4 class="news-item-detail-title">面板2：微信广告</h4>
             <p class="news-item-detail-des">微信广告微信广告微信广告微信广告</p>
             <i class="news-item-detail-tips">4545人看过</i>
           </a>
@@ -116,7 +116,7 @@
         this.el = document.querySelector(this.targetSelector);
         this.wrap = document.querySelector(this.wrapSelector);
         this.items = this.wrap.children;
-        this.previousOffset = this.getWrapTranslateX();
+        this.previousOffset = this.getWraptranslate3d();
         var itemWidth = this.getItemWidth();
         var activeIndex = this.activeIndex;
         this.availableScrollDist = itemWidth * this.items.length - window.screen.width;
@@ -146,8 +146,8 @@
           return this.items.length - 1;
         },
 
-        getWrapTranslateX: function(){
-          var transValue = this.wrap.style[transform].match(/translateX\(([\d\-\.]+)px\)/);
+        getWraptranslate3d: function(){
+          var transValue = this.wrap.style[transform].match(/translate3d\(([\d\-\.]+)px\, 0px\, 0px\)/);
           return transValue ? parseFloat(transValue[1]) : 0;
         },
 
@@ -163,7 +163,7 @@
         slide: function(toIndex){
           var me = this, curMoveDist = -me.getItemWidth() * toIndex;
           me.activeIndex = toIndex;
-          me.wrap.style[transform] = 'translateX('+ curMoveDist +'px)';;
+          me.wrap.style[transform] = 'translate3d('+ curMoveDist +'px, 0px, 0px)';;
         },
 
         onTouchStart: function(e){
@@ -173,7 +173,7 @@
           me.wrap.addEventListener(touchEvent.move, me, false);
           me.wrap.addEventListener(touchEvent.end, me, false);
 
-          me.previousOffset = this.getWrapTranslateX();
+          me.previousOffset = this.getWraptranslate3d();
           me.touchCoords = {};
           me.touchCoords.startX = e.touches[0].pageX;
           me.touchCoords.startY = e.touches[0].pageY;
@@ -187,7 +187,7 @@
             me.touchCoords.stopX = e.touches[0].pageX;
             me.touchCoords.stopY = e.touches[0].pageY;
             me.touchCoords.offsetX = -(me.touchCoords.startX - me.touchCoords.stopX) + me.previousOffset;
-            me.wrap.style[transform] = 'translateX(' + me.touchCoords.offsetX + 'px)';
+            me.wrap.style[transform] = 'translate3d(' + me.touchCoords.offsetX + 'px, 0px, 0px)';
           }
         },
 
@@ -212,12 +212,12 @@
                 return;
               }
 
-              this.previousOffset = this.getWrapTranslateX();
+              this.previousOffset = this.getWraptranslate3d();
               if (this.previousOffset > 0) {//向右滑
-                this.wrap.style[transform] = 'translateX(0px)';
+                this.wrap.style[transform] = 'translate3d(0px, 0px, 0px)';
               }else{//向左滑
                 if (Math.abs(this.previousOffset) > this.availableScrollDist) {//向左滑动到了最后一个导航
-                  this.wrap.style[transform] = 'translateX('+ -this.availableScrollDist +'px)';
+                  this.wrap.style[transform] = 'translate3d('+ -this.availableScrollDist +'px, 0px, 0px)';
                 }
               }
               break;
