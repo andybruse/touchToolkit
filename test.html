@@ -186,16 +186,14 @@
           if (me.touchCoords) {
             me.touchCoords.stopX = e.touches[0].pageX;
             me.touchCoords.stopY = e.touches[0].pageY;
-            me.touchCoords.offsetX = -(me.touchCoords.startX - me.touchCoords.stopX + me.previousOffset);
+            me.touchCoords.offsetX = -(me.touchCoords.startX - me.touchCoords.stopX) + me.previousOffset;
             me.wrap.style[transform] = 'translateX(' + me.touchCoords.offsetX + 'px)';
-            console.log("m.offsetX:" + me.touchCoords.offsetX);
           }
         },
 
         onTouchEnd: function(e){
           switch(this.slideType) {
             case "ctn-card":
-              console.log("final offsetX: "+this.touchCoords.offsetX)
               if (Math.abs(this.touchCoords.offsetX) >= 80 || (e.timeStamp - this.touchCoords.timeStamp < 200)) {
                 if (this.touchCoords.startX > this.touchCoords.stopX) {
                   //向左滑
@@ -217,11 +215,9 @@
               this.previousOffset = this.getWrapTranslateX();
               if (this.previousOffset > 0) {//向右滑
                 this.wrap.style[transform] = 'translateX(0px)';
-                console.log("header-nav//向右滑");
               }else{//向左滑
                 if (Math.abs(this.previousOffset) > this.availableScrollDist) {//向左滑动到了最后一个导航
                   this.wrap.style[transform] = 'translateX('+ -this.availableScrollDist +'px)';
-                  console.log("header-nav//向左滑");
                 }
               }
               break;
